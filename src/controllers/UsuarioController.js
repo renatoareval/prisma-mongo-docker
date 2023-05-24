@@ -4,18 +4,9 @@ import { prisma } from '../config/prismaClient.js'
 
 const listar = async (req, res) => {
 
-    const { busca, take, skip } = req.query
-
-    const result = await prisma.user.findMany({
-        where: {
-            name: {
-                contains: String(busca),
-                mode: 'insensitive'
-            }
-        }
-    });
+    const result = await prisma.user.findMany();
     return res.send(result)
-
+    
 
 }
 

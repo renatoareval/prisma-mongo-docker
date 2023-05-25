@@ -7,7 +7,7 @@ db.once("open", () => {
 });
 
 
-await usuarios(20)
+await usuarios(50)
 
 db.close((err) => {
     err ? console.log(err) : console.log("Conexão com o banco encerrada!");

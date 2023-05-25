@@ -3,9 +3,17 @@ import { prisma } from '../config/prismaClient.js'
 
 
 const listar = async (req, res) => {
+    const {search,take, skip} = req.query
+    const users = await prisma.user.findMany({
+        where:{
+            name:{
+                contains: search
+            }
+        },take:Number(take)
+    })
 
-    const result = await prisma.user.findMany();
-    return res.send(result)
+
+    return res.send(users)
 
 
 }
@@ -50,7 +58,7 @@ const criar = async (req, res) => {
             })
             return res.status(200).json(users)
         }else{
-            return res.send("Usuário já existe")
+            return res.send({msg:"Usuário já existe"})
         }
 
     } catch (err) {

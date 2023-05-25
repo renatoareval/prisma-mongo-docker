@@ -6,7 +6,7 @@ const listar = async (req, res) => {
 
     const result = await prisma.user.findMany();
     return res.send(result)
-    
+
 
 }
 
@@ -36,18 +36,23 @@ const criar = async (req, res) => {
     try {
         const { name, email } = req.body
 
-        if (email) {
-            res.send({ msg: "Usuário ja existe" })
-        }
-
-        const users = await prisma.user.create({
-            data: {
-                name,
+        const userExist = await prisma.user.findFirst({
+            where: {
                 email
             }
         })
+        if (!userExist) {
+            const users = await prisma.user.create({
+                data: {
+                    name,
+                    email
+                }
+            })
+            return res.status(200).json(users)
+        }else{
+            return res.send("Usuário já existe")
+        }
 
-        return res.status(201).json(users)
     } catch (err) {
         return res.status(500).json([{ error: true, code: 500, message: "Erro interno do Servidor" }])
     }
